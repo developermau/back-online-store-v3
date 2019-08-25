@@ -23,7 +23,16 @@ function login(req, res) {
   console.log("req.body", req.body);
   const { us_username, us_password } = req.body;
 
-  Usuario.findOne({ where: { us_username } })
+  Usuario.findOne(
+    { where: { us_username } },
+    {
+      include: [
+        { model: fotografiaModel, as: "fotografias" },
+        { model: categoriaModel, as: "categoria" },
+        { model: proveedorModel, as: "proveedor" }
+      ]
+    }
+  )
     .then(user => {
       if (!user) {
         return res
@@ -57,11 +66,11 @@ function login(req, res) {
             console.log(err);
             res
               .status(Util.HttpCodes.HTTP_500_INTERNAL_SERVER_ERROR)
-              .send({ auth: false, token: "", err });
+              .send({ user: null, auth: false, token: "", err });
           } else {
             res
               .status(Util.HttpCodes.HTTP_200_OK)
-              .send({ auth: true, token, err: null });
+              .send({ user: payload, auth: true, token, err: null });
           }
         }
       );
@@ -70,7 +79,7 @@ function login(req, res) {
       console.log(err);
       res
         .status(Util.HttpCodes.HTTP_500_INTERNAL_SERVER_ERROR)
-        .send({ auth: false, token: "", err });
+        .send({ user: null, auth: false, token: "", err });
     });
 }
 
