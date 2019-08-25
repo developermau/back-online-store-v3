@@ -120,6 +120,14 @@ module.exports = (sequelize, DataTypes) => {
       },
       as: "compra"
     });
+
+    Usuario.belongsTo(models.Rol, {
+      foreignKey: {
+        name: "ro_rol",
+        allowNull: false
+      },
+      as: "rol"
+    });
   };
 
   Usuario.prototype.validPassword = function(password) {
