@@ -122,29 +122,38 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
+  Usuario.prototype.validPassword = function(password) {
+    return bcrypt.compareSync(password, this.us_password);
+  };
+
   Usuario.beforeSave((user, options) => {
-    return bcrypt.hash(user.us_password, 10).then(function(hash) {
-      user.us_password = hash;
-    });
+    const { us_password } = user;
+
+    var saltRounds = 10;
+    var salt = bcrypt.genSaltSync(saltRounds);
+    var hash = bcrypt.hashSync(us_password, salt);
+    user.us_password = hash;
   });
 
   Usuario.beforeBulkCreate((users, options) => {
     for (const user of users) {
-      if (user.isMember) {
-        bcrypt.hash(user.us_password, 10).then(function(hash) {
-          user.us_password = hash;
-        });
-      }
+      const { us_password } = user;
+
+      var saltRounds = 10;
+      var salt = bcrypt.genSaltSync(saltRounds);
+      var hash = bcrypt.hashSync(us_password, salt);
+      user.us_password = hash;
     }
   });
 
   Usuario.beforeBulkUpdate((users, options) => {
     for (const user of users) {
-      if (user.isMember) {
-        bcrypt.hash(user.us_password, 10).then(function(hash) {
-          user.us_password = hash;
-        });
-      }
+      const { us_password } = user;
+
+      var saltRounds = 10;
+      var salt = bcrypt.genSaltSync(saltRounds);
+      var hash = bcrypt.hashSync(us_password, salt);
+      user.us_password = hash;
     }
   });
 
