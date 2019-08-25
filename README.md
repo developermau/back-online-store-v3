@@ -32,11 +32,11 @@ npm run filldb
 ## Extra: Borrar la BD
 
 ```bash
-npm run filldb
+npm run dropdb
 ```
 
 ## Extra: Borrar los datos de prueba
 
 ```bash
-npm run filldb
+npm run emptydb
 ```
