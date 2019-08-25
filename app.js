@@ -53,7 +53,7 @@ function fnBuildApiByVersion(app, version) {
   app.use(`/api/${version}/productos`, productoRouter);
   app.use(`/api/${version}/proveedores`, proveedorRouter);
   app.use(`/api/${version}/recursos`, recursoRouter);
-  app.use(`/api/${version}/rols`, rolRouter);
+  app.use(`/api/${version}/roles`, rolRouter);
   app.use(`/api/${version}/usuarios`, usuarioRouter);
 }
 
