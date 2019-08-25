@@ -1,6 +1,18 @@
 var express = require("express");
+var logger = require("morgan");
+var bodyParser = require("body-parser");
+var cors = require("cors");
+// Passport configured
+var passport = require("./passport/jwt-passport");
 
 var app = express();
+
+app.use(logger("combined"));
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Routes: Index
 var indexRouter = require("./routes/index");
