@@ -77,7 +77,6 @@ router.post('/', function (req, res, next) {
 	let usuarioRegister = req.body;
 
 	modelUsuario.create(usuarioRegister).then(usuario => {
-		console.log("Creado...", usuario);
 		let resCreated = {
 			statusCode: Util.HttpCodes.HTTP_201_CREATED,
 			msg: `Usuario creo exitosamente`,
