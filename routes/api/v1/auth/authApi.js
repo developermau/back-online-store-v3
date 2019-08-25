@@ -1,53 +1,77 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
+var jwt = require("jsonwebtoken");
 
-// MODELS
-var models = require('../../../../models');
+// Models
+var models = require("../../../../models");
+// Model: Usuario
+var Usuario = models.Usuario;
+// Config
+var CONFIG = require("../../../../config/jwtConfig");
+
 // HTTP CODES
-var Util = require('../../util/httpcodes');
+var Util = require("../../util/httpcodes");
 // Handler Error
-var fnHandlerError = require('../../util/handlers');
+var fnHandlerError = require("../../util/handlers");
+// Expiration Time
+var expirationTime = "24h";
 
-// Nombre del modelo
-const NAME_MODEL = "USUARIO";
+/* POST: Login  */
+router.post("/login", login);
 
-console.log(NAME_MODEL)
+function login(req, res) {
+  console.log("req.body", req.body);
+  const { us_username, us_password } = req.body;
 
-/* POST Login Usuario  */
-router.post('/login', function (req, res, next) {
+  Usuario.findOne({ where: { us_username } })
+    .then(user => {
+      if (!user) {
+        return res
+          .status(Util.HttpCodes.HTTP_400_BAD_REQUEST)
+          .send({ msg: "Incorrect username." });
+      }
 
-	const OPERACION = "LOGIN";
-	console.log(`\n${NAME_MODEL}:${OPERACION}`);
+      if (!user.validPassword(us_password)) {
+        return res
+          .status(Util.HttpCodes.HTTP_400_BAD_REQUEST)
+          .send({ msg: "Incorrect password." });
+      }
 
-	// MODEL: Usuario
-	let modelUsuario = models.Usuario;
+      // JWT: Payload
+      const { us_usuario, us_username, us_email, ro_rol } = user;
 
-	// Request Data
-	let userLogin = req.body;
+      const payload = {
+        us_usuario,
+        us_username,
+        us_email,
+        ro_rol
+      };
 
-	// Condition
-	let condition = {
-		where: userLogin
-	};
-
-	modelUsuario.findOne(condition).then(function (usuario) {
-		console.log("Encontrado...", usuario);
-		if (usuario !== null && usuario !== undefined) {
-			res.status(Util.HttpCodes.HTTP_200_OK).json(usuario)
-		} else {
-			const msgError = "Usuario no encontrado.";
-			const err = {
-				table: "Usuario",
-				msg: "Error. " + msgError
-			}
-			res.status(Util.HttpCodes.HTTP_404_NOT_FOUND).send(err);
-		}
-
-	}).catch(err => {
-		let resError = fnHandlerError(err);
-		console.log(resError);
-		res.status(resError.statusCode).send(resError);
-	});
-});
+      // JWT: Generate token
+      jwt.sign(
+        payload,
+        CONFIG.SECRET_TOKEN,
+        { expiresIn: expirationTime },
+        function(err, token) {
+          if (err) {
+            console.log(err);
+            res
+              .status(Util.HttpCodes.HTTP_500_INTERNAL_SERVER_ERROR)
+              .send({ auth: false, token: "", err });
+          } else {
+            res
+              .status(Util.HttpCodes.HTTP_200_OK)
+              .send({ auth: true, token, err: null });
+          }
+        }
+      );
+    })
+    .catch(err => {
+      console.log(err);
+      res
+        .status(Util.HttpCodes.HTTP_500_INTERNAL_SERVER_ERROR)
+        .send({ auth: false, token: "", err });
+    });
+}
 
 module.exports = router;
