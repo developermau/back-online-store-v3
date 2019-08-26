@@ -83,7 +83,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       us_avatar: {
         type: DataTypes.STRING,
-        defaultValue: ""
+        defaultValue: "https://raw.githubusercontent.com/alxmcr/assets-online-store/master/avatar/profile.png"
       },
       us_fecha_nacimiento: {
         type: DataTypes.STRING,
