@@ -33,43 +33,37 @@ function login(req, res) {
       include: [{ model: rolModel, as: "rol" }]
     })
       .then(user => {
-        //console.log("\n\n********user", user);
-        console.log("\n\n********user.rol.dataValues", user.rol.dataValues);
         if (!user) {
-          return res
-            .status(Util.HttpCodes.HTTP_400_BAD_REQUEST)
-            .send({ msg: "Incorrect username." });
+          return res.status(Util.HttpCodes.HTTP_400_BAD_REQUEST).send({
+            user: null,
+            isAuth: false,
+            token: "",
+            msg: "Incorrect username."
+          });
         }
 
         if (!user.validPassword(us_password)) {
-          return res
-            .status(Util.HttpCodes.HTTP_400_BAD_REQUEST)
-            .send({ msg: "Incorrect password." });
+          return res.status(Util.HttpCodes.HTTP_400_BAD_REQUEST).send({
+            user: null,
+            isAuth: false,
+            token: "",
+            msg: "Incorrect password."
+          });
         }
 
-        // JWT: Payload
         const {
-          us_usuario,
-          us_username,
           us_email,
           us_avatar,
-          us_genero,
-          ro_rol
+          us_primer_nombre,
+          us_paterno_apellido
         } = user;
 
+        // JWT: Payload
         const payload = {
-          us_usuario,
-          us_username,
-          us_email
-        };
-
-        const userSimplified = {
-          us_usuario,
           us_username,
           us_email,
           us_avatar,
-          us_genero,
-          ro_rol
+          us_primer_nombre
         };
 
         // JWT: Generate token
@@ -79,14 +73,19 @@ function login(req, res) {
           { expiresIn: expirationTime },
           function(err, token) {
             if (err) {
-              console.log(err);
-              res
-                .status(Util.HttpCodes.HTTP_500_INTERNAL_SERVER_ERROR)
-                .send({ user: null, auth: false, token: "", err });
+              res.status(Util.HttpCodes.HTTP_500_INTERNAL_SERVER_ERROR).send({
+                user: null,
+                isAuth: false,
+                token: "",
+                msg: err.message
+              });
             } else {
-              res
-                .status(Util.HttpCodes.HTTP_200_OK)
-                .send({ user: userSimplified, auth: true, token, err: null });
+              res.status(Util.HttpCodes.HTTP_200_OK).send({
+                user: payload,
+                isAuth: true,
+                token,
+                msg: "Bienvenido!"
+              });
             }
           }
         );
@@ -95,7 +94,7 @@ function login(req, res) {
         console.log(err);
         res
           .status(Util.HttpCodes.HTTP_500_INTERNAL_SERVER_ERROR)
-          .send({ user: null, auth: false, token: "", err });
+          .send({ user: null, isAuth: false, token: "", msg: err.message });
       });
   } catch (error) {
     console.error(error);
