@@ -51,15 +51,11 @@ function login(req, res) {
           });
         }
 
-        const {
-          us_email,
-          us_avatar,
-          us_primer_nombre,
-          us_paterno_apellido
-        } = user;
+        const { us_usuario, us_email, us_avatar, us_primer_nombre } = user;
 
         // JWT: Payload
         const payload = {
+          us_usuario,
           us_username,
           us_email,
           us_avatar,
