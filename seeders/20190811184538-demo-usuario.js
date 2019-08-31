@@ -1,18 +1,24 @@
 "use strict";
 
+const models = require("../models");
+const Usuario = models.Usuario;
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
     const usuarios = generateAllUsuarios();
 
     try {
-      return queryInterface.bulkInsert("Usuario", usuarios, {});
+      return Usuario.bulkCreate(usuarios, {});
     } catch (error) {
       console.error(error);
     }
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("Usuario", null, {});
+    return Usuario.destroy({
+      where: {},
+      truncate: true /* this will ignore where and truncate the table instead */
+    });
   }
 };
 
