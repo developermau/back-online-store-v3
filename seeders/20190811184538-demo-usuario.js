@@ -35,8 +35,8 @@ function generateAllUsuarios() {
       us_password: "jflores-1234",
       us_email: "jflores@mail.com",
       us_direccion: "Calle Roma #231 Zona Central",
-      us_primer_telefono: 2456456,
-      us_segundo_telefono: 75415642,
+      us_telefono_fijo: 2456456,
+      us_telefono_movil: 75415642,
       us_avatar: "https://randomuser.me/api/portraits/thumb/men/65.jpg",
       us_fecha_nacimiento: new Date(1980, 5, 15),
       // references
@@ -57,8 +57,8 @@ function generateAllUsuarios() {
       us_password: "mcastro-1234",
       us_email: "mcastro@mail.com",
       us_direccion: "Av. Murillo #654 Zona Central",
-      us_primer_telefono: 3567874,
-      us_segundo_telefono: 69845642,
+      us_telefono_fijo: 3567874,
+      us_telefono_movil: 69845642,
       us_avatar: "https://randomuser.me/api/portraits/thumb/women/60.jpg",
       us_fecha_nacimiento: new Date(1995, 12, 18),
       // references

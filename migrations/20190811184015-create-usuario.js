@@ -44,10 +44,10 @@ module.exports = {
       us_direccion: {
         type: Sequelize.STRING
       },
-      us_primer_telefono: {
+      us_telefono_fijo: {
         type: Sequelize.INTEGER
       },
-      us_segundo_telefono: {
+      us_telefono_movil: {
         type: Sequelize.INTEGER
       },
       us_avatar: {

@@ -73,11 +73,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         defaultValue: ""
       },
-      us_primer_telefono: {
+      us_telefono_fijo: {
         type: DataTypes.INTEGER,
         defaultValue: 0
       },
-      us_segundo_telefono: {
+      us_telefono_movil: {
         type: DataTypes.INTEGER,
         defaultValue: 0
       },

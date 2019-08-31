@@ -21,7 +21,7 @@ npx sequelize-cli model:generate --name Recurso --attributes re_titulo:string,re
 ## Usuario
 
 ```bash
-npx sequelize-cli model:generate --name Usuario --attributes us_primer_nombre:string,us_segundo_nombre:string,us_paterno_apellido:string,us_materno_apellido:string,us_genero:string,us_carnet:bigint,us_username:string,us_password:string,us_email:string,us_direccion:string,us_primer_telefono:integer,us_segundo_telefono:integer,us_avatar:string,us_fecha_nacimiento:string,ro_rol:integer,us_active:boolean
+npx sequelize-cli model:generate --name Usuario --attributes us_primer_nombre:string,us_segundo_nombre:string,us_paterno_apellido:string,us_materno_apellido:string,us_genero:string,us_carnet:bigint,us_username:string,us_password:string,us_email:string,us_direccion:string,us_telefono_fijo:integer,us_telefono_movil:integer,us_avatar:string,us_fecha_nacimiento:string,ro_rol:integer,us_active:boolean
 ```
 
 ## Categoria
