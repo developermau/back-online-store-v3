@@ -10,7 +10,7 @@ module.exports = {
       },
       co_codigo_orden: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       co_nro_deposito: {
         type: Sequelize.STRING,
@@ -22,7 +22,8 @@ module.exports = {
       },
       co_estado: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        defaultValue: "En proceso"
       },
       us_usuario: {
         type: Sequelize.INTEGER,
