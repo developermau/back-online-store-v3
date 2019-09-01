@@ -51,7 +51,19 @@ function login(req, res) {
           });
         }
 
-        const { us_usuario, us_email, us_avatar, us_primer_nombre } = user;
+        const {
+          us_usuario,
+          us_email,
+          us_avatar,
+          us_primer_nombre,
+          us_segundo_nombre,
+          us_paterno_apellido,
+          us_materno_apellido,
+          us_carnet,
+          us_direccion,
+          us_telefono_fijo,
+          us_telefono_movil
+        } = user;
 
         // JWT: Payload
         const payload = {
@@ -59,7 +71,14 @@ function login(req, res) {
           us_username,
           us_email,
           us_avatar,
-          us_primer_nombre
+          us_primer_nombre,
+          us_segundo_nombre,
+          us_paterno_apellido,
+          us_materno_apellido,
+          us_carnet,
+          us_direccion,
+          us_telefono_fijo,
+          us_telefono_movil
         };
 
         // JWT: Generate token
