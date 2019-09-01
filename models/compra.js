@@ -44,6 +44,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       as: "usuario"
     });
+    // belongsToMany: 
+    // adiciona a la tabla RelIncluye una foreignKey 'co_compra'
+    Compra.belongsToMany(models.Producto, {
+      through: models.RelIncluye,
+      foreignKey: "co_compra"
+    });
   };
   return Compra;
 };
