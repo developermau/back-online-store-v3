@@ -21,6 +21,10 @@ module.exports = {
       ri_cantidad: {
         type: Sequelize.INTEGER,
         allowNull: false,
+      },
+      ri_es_envio: {
+        type: Sequelize.STRING,
+        allowNull: false,
       }
     });
   },

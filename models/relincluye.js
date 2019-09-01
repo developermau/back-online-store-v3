@@ -15,6 +15,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0
+      },
+      ri_es_envio: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: "NO"
       }
     },
     {}

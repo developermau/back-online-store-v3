@@ -57,5 +57,5 @@ npx sequelize-cli model:generate --name Opinion --attributes op_texto:string,op_
 ## Compra
 
 ```bash
-npx sequelize-cli model:generate --name Compra --attributes co_codigo_orden:string,co_total_bs:double,co_estado:string,us_usuario:integer
+npx sequelize-cli model:generate --name Compra --attributes co_codigo_orden:string,co_nro_deposito:string,co_total_bs:double,co_estado:string,us_usuario:integer
 ```

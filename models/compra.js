@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false
       },
+      co_nro_deposito: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
       co_total_bs: {
         type: DataTypes.DOUBLE,
         allowNull: false

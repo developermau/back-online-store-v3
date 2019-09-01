@@ -12,6 +12,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      co_nro_deposito: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       co_total_bs: {
         type: Sequelize.DOUBLE,
         allowNull: false
