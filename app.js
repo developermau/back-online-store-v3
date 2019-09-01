@@ -21,8 +21,9 @@ app.use("/", indexRouter);
 
 // Version API
 const VERSION_API_REST = "v1";
-fnBuildApiByVersion(app, VERSION_API_REST);
 fnBuildAuthApiByVersion(app, VERSION_API_REST);
+fnBuildModelApiByVersion(app, VERSION_API_REST);
+fnBuildRelacionApiByVersion(app, VERSION_API_REST)
 
 // Listen
 const host = "localhost";
@@ -31,7 +32,7 @@ app.listen(port, host, function() {
   console.log(`Server is running on http://${host}:${port}`);
 });
 
-function fnBuildApiByVersion(app, version) {
+function fnBuildModelApiByVersion(app, version) {
   // Routes: API
   var areaRouter = require(`./routes/api/${version}/areaApi`);
   var categoriaRouter = require(`./routes/api/${version}/categoriaApi`);
@@ -62,4 +63,11 @@ function fnBuildAuthApiByVersion(app, version) {
   var authRouter = require(`./routes/api/${version}/auth/authApi`);
   // Routes: Auth
   app.use(`/api/${version}/auth`, authRouter);
+}
+
+function fnBuildRelacionApiByVersion(app, version) {
+  // Routes: AUTH
+  var relIncluyeRouter = require(`./routes/api/${version}/relIncluyeApi`);
+  // Routes: Relacion Incluye
+  app.use(`/api/${version}/incluyes`, relIncluyeRouter);
 }
