@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       co_codigo_orden: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
       },
       co_nro_deposito: {
         type: DataTypes.STRING,
@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       co_estado: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        defaultValue: "En proceso"
       },
       us_usuario: {
         type: DataTypes.INTEGER,
