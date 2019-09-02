@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         name: "ca_categoria",
         allowNull: false
       },
-      as: "producto"
+      as: "productos"
     });
   };
   return Categoria;
