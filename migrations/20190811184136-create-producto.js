@@ -14,7 +14,7 @@ module.exports = {
         unique: true
       },
       pr_descripcion: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false
       },
       pr_marca: {
