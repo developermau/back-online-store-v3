@@ -105,10 +105,17 @@ module.exports = (sequelize, DataTypes) => {
       as: "categoria"
     });
 
-    // belongsToMany: 
+    // belongsToMany:
     // adiciona a la tabla RelIncluye una foreignKey 'pr_producto'
     Producto.belongsToMany(models.Compra, {
       through: models.RelIncluye,
+      foreignKey: "pr_producto"
+    });
+
+    // belongsToMany:
+    // adiciona a la tabla RelGusta una foreignKey 'pr_producto'
+    Producto.belongsToMany(models.Usuario, {
+      through: models.RelGusta,
       foreignKey: "pr_producto"
     });
   };

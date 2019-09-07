@@ -83,7 +83,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       us_avatar: {
         type: DataTypes.STRING,
-        defaultValue: "https://raw.githubusercontent.com/alxmcr/assets-online-store/master/avatar/profile.png"
+        defaultValue:
+          "https://raw.githubusercontent.com/alxmcr/assets-online-store/master/avatar/profile.png"
       },
       us_fecha_nacimiento: {
         type: DataTypes.STRING,
@@ -127,6 +128,13 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       as: "rol"
+    });
+
+    // belongsToMany:
+    // adiciona a la tabla RelGusta una foreignKey 'pr_producto'
+    Usuario.belongsToMany(models.Producto, {
+      through: models.RelGusta,
+      foreignKey: "us_usuario"
     });
   };
 
