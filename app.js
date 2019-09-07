@@ -74,7 +74,7 @@ function fnBuildRelacionApiByVersion(app, version) {
   var relIncluyeRouter = require(`./routes/api/${version}/relIncluyeApi`);
   var relGustaRouter = require(`./routes/api/${version}/relGustaApi`);
   // Routes: Relacion Incluye
-  app.use(`/api/${version}/incluye`, relIncluyeRouter);
+  app.use(`/api/${version}/incluyes`, relIncluyeRouter);
   // Routes: Relacion Gusta
-  app.use(`/api/${version}/gusta`, relGustaRouter);
+  app.use(`/api/${version}/gustas`, relGustaRouter);
 }
