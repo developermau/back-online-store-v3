@@ -16,7 +16,19 @@ module.exports = {
         {
           us_usuario: 2,
           pr_producto: 2
-        }
+        },
+        {
+          us_usuario: 2,
+          pr_producto: 3
+        },
+        {
+          us_usuario: 2,
+          pr_producto: 4
+        },
+        {
+          us_usuario: 1,
+          pr_producto: 5
+        },
       ],
       {}
     );
