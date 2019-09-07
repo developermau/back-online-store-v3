@@ -12,7 +12,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       }
     },
-    {}
+    {
+      tableName: "RelPertenece",
+      timestamps: false
+    }
   );
   RelPertenece.associate = function(models) {
     // associations can be defined here
