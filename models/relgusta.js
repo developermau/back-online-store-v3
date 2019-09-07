@@ -17,6 +17,16 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false
     }
   );
-  RelGusta.associate = function(models) {};
+  RelGusta.associate = function(models) {
+    // associations can be defined here
+    RelGusta.belongsTo(models.Producto, {
+      as: "producto",
+      onDelete: "CASCADE",
+      foreignKey: {
+        name: "pr_producto",
+        allowNull: false
+      }
+    });
+  };
   return RelGusta;
 };
