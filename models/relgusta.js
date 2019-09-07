@@ -1,7 +1,7 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
-  const RelGuarda = sequelize.define(
-    "RelGuarda",
+  const RelGusta = sequelize.define(
+    "RelGusta",
     {
       us_usuario: {
         type: DataTypes.INTEGER,
@@ -14,9 +14,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  RelGuarda.associate = function(models) {
+  RelGusta.associate = function(models) {
     // associations can be defined here
-    RelGuarda.belongsTo(models.Usuario, {
+    RelGusta.belongsTo(models.Usuario, {
       as: "usuario",
       onDelete: "CASCADE",
       foreignKey: {
@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     });
 
-    RelGuarda.belongsTo(models.Producto, {
+    RelGusta.belongsTo(models.Producto, {
       as: "producto",
       onDelete: "CASCADE",
       foreignKey: {
@@ -34,5 +34,5 @@ module.exports = (sequelize, DataTypes) => {
       }
     });
   };
-  return RelGuarda;
+  return RelGusta;
 };
