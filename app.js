@@ -4,6 +4,8 @@ var bodyParser = require("body-parser");
 var cors = require("cors");
 // Passport configured
 var passport = require("./passport/jwt-passport");
+// List endpoints
+const listEndpoints = require('express-list-endpoints')
 
 var app = express();
 
@@ -23,7 +25,9 @@ app.use("/", indexRouter);
 const VERSION_API_REST = "v1";
 fnBuildAuthApiByVersion(app, VERSION_API_REST);
 fnBuildModelApiByVersion(app, VERSION_API_REST);
-fnBuildRelacionApiByVersion(app, VERSION_API_REST)
+fnBuildRelacionApiByVersion(app, VERSION_API_REST);
+
+console.log(listEndpoints(app));
 
 // Listen
 const host = "localhost";
@@ -66,8 +70,11 @@ function fnBuildAuthApiByVersion(app, version) {
 }
 
 function fnBuildRelacionApiByVersion(app, version) {
-  // Routes: AUTH
+  // Routes: Relationships
   var relIncluyeRouter = require(`./routes/api/${version}/relIncluyeApi`);
+  var relGustaRouter = require(`./routes/api/${version}/relGustaApi`);
   // Routes: Relacion Incluye
-  app.use(`/api/${version}/incluyes`, relIncluyeRouter);
+  app.use(`/api/${version}/incluye`, relIncluyeRouter);
+  // Routes: Relacion Gusta
+  app.use(`/api/${version}/gusta`, relGustaRouter);
 }
