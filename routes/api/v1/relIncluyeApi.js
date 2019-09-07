@@ -9,7 +9,7 @@ var Util = require('../util/httpcodes');
 var fnHandlerError = require('../util/handlers');
 
 // Nombre del modelo
-const NAME_MODEL = "relIncluye";
+const NAME_MODEL = "RelIncluye";
 
 /* GET Lista de las relaciones Incluye */
 router.get('/', function (req, res, next) {
