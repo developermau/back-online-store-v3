@@ -47,13 +47,13 @@ router.get("/", function(req, res, next) {
 });
 
 /* GET Buscar un producto por su id */
-router.get("/:ca_producto", function(req, res, next) {
+router.get("/:pr_producto", function(req, res, next) {
   const OPERACION = "FIND";
   const CAMPO = "POR ID";
   console.log(`\n${OPERACION}:${NAME_MODEL} ${CAMPO}`);
 
   // ID
-  var productoId = req.params.ca_producto;
+  var productoId = req.params.pr_producto;
 
   productoModel
     .findByPk(productoId, {
