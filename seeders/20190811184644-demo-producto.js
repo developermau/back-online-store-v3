@@ -61,7 +61,7 @@ function productsGeneratedByCategory(ca_categoria, ca_nombre, count) {
     let randomPrice = getRndInteger(500, 15000);
     let randomSendPrice = getRndInteger(0, 500);
     let randomYear = getRndInteger(2010, 2019);
-    let randomStock = getRndInteger(0, 200);
+    let randomStock = getRndInteger(0, 25);
     let estado = "A";
 
     if (randomNumber % 2 === 0) {
