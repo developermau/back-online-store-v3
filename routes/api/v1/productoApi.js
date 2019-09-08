@@ -149,7 +149,10 @@ router.put("/:pr_producto", function(req, res, next) {
 
         let resUpdated = {
           statusCode,
-          msg
+          msg,
+          data: {
+            rowsUpdated: quantityRowsUpdated
+          }
         };
         res.status(resUpdated.statusCode).json(resUpdated);
       })
