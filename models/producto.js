@@ -12,23 +12,19 @@ module.exports = (sequelize, DataTypes) => {
       pr_nombre: {
         type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: "",
         unique: true
       },
       pr_descripcion: {
         type: DataTypes.STRING,
-        allowNull: false,
-        defaultValue: ""
+        allowNull: false
       },
       pr_marca: {
         type: DataTypes.STRING,
-        allowNull: false,
-        defaultValue: ""
+        allowNull: false
       },
       pr_precio_bs: {
         type: DataTypes.DOUBLE,
         allowNull: false,
-        defaultValue: 0,
         validate: {
           isDecimal: true,
           notNull: true
@@ -37,7 +33,6 @@ module.exports = (sequelize, DataTypes) => {
       pr_precio_envio_bs: {
         type: DataTypes.DOUBLE,
         allowNull: false,
-        defaultValue: 0,
         validate: {
           isDecimal: true,
           notNull: true
@@ -45,13 +40,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       pr_stock: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0
+        allowNull: false
       },
       pr_year: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0
+        allowNull: false
       },
       pr_estado: {
         type: DataTypes.STRING,
