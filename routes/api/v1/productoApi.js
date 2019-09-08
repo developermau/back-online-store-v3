@@ -2,11 +2,11 @@ var express = require("express");
 var router = express.Router();
 
 // MODELS
-var models = require('../../../models');
+var models = require("../../../models");
 // HTTP CODES
-var Util = require('../util/httpcodes');
+var Util = require("../util/httpcodes");
 // Handler Error
-var fnHandlerError = require('../util/handlers');
+var fnHandlerError = require("../util/handlers");
 
 // Nombre del modelo
 const NAME_MODEL = "PRODUCTO";
@@ -92,15 +92,10 @@ router.post("/", function(req, res, next) {
 
   // Request Data
   let productoRegister = req.body;
+  console.log("productoRegister", productoRegister);
 
   productoModel
-    .create(productoRegister, {
-      include: [
-        { model: fotografiaModel, as: "fotografias" },
-        { model: categoriaModel, as: "categoria" },
-        { model: proveedorModel, as: "proveedor" }
-      ]
-    })
+    .create(productoRegister)
     .then(producto => {
       let resCreated = {
         statusCode: Util.HttpCodes.HTTP_201_CREATED,
