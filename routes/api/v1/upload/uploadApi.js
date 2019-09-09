@@ -10,11 +10,13 @@ var fnHandlerErrorMulter = require("../../util/handlersErrorMulter");
 router.post("/:nameSection", function(req, res, next) {
   var limitMaxCountFiles = 5;
   var nameSection = req.params.nameSection;
+  var folderUploads = "./uploads/" + nameSection;
+
   console.log("nameSection", nameSection);
 
   var storage = multer.diskStorage({
     destination: function(req, file, cb) {
-      cb(null, "./uploads/" + nameSection);
+      cb(null, folderUploads);
     },
     filename: function(req, file, cb) {
       console.log("file", file);
@@ -30,12 +32,12 @@ router.post("/:nameSection", function(req, res, next) {
     if (err instanceof multer.MulterError) {
       console.log(err);
       // A Multer error occurred when uploading.
-      let resError = fnHandlerErrorMulter(err);
+      let resError = fnHandlerErrorMulter(err, folderUploads, limitMaxCountFiles);
       res.status(resError.statusCode).send(resError);
     } else if (err) {
       console.log(err);
       // An unknown error occurred when uploading.
-      let resError = fnHandlerErrorMulter(err);
+      let resError = fnHandlerErrorMulter(err, folderUploads, limitMaxCountFiles);
       res.status(resError.statusCode).send(resError);
     }
 
