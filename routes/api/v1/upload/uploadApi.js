@@ -9,53 +9,34 @@ var fnHandlerError = require("../../util/handlersApi");
 
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    // console.log("destination.file", file);
-    // console.log("req", req);
-    console.log("destination", req.body);
-    console.log("destination file", file);
-    cb(null, "./uploads" + "/" + file.fieldname);
+    cb(null, "./uploads/photos");
   },
   filename: function(req, file, cb) {
-    cb(null, file.originalname);
+    cb(null, file.fieldname + "-" + Date.now());
   }
 });
 
-router.post("/upload/:section", function(req, res) {
-  try {
-    var section = req.params;
-    var upload = multer({ storage: storage }).array(section, 1);
-    //console.log(upload);
+var multerWithStorage = multer({ storage: storage });
 
-    //   console.log("router.post -> req.params", req.params);
-    //   console.log("router.post -> req.body", req.body);
+var upload = multerWithStorage.array("photos", 12);
 
-    upload(req, res, function(err) {
-      if (err instanceof multer.MulterError) {
-        // A Multer error occurred when uploading.
-        console.log("Error uploading file.");
-        let resError = fnHandlerError(err);
-        console.log(resError);
-        return res.status(resError.statusCode).send(resError);
-      } else if (err) {
-        // An unknown error occurred when uploading.
-        let resError = fnHandlerError(err);
-        console.log(resError);
-        return res.status(resError.statusCode).send(resError);
-      }
+router.post("/photos/upload", function(req, res, next) {
+  upload(req, res, function(err) {
+    if (err instanceof multer.MulterError) {
+      console.log(err);
+      // A Multer error occurred when uploading.
+      let resError = fnHandlerError(err);
+      res.status(resError.statusCode).send(resError);
+    } else if (err) {
+      console.log(err);
+      // An unknown error occurred when uploading.
+      let resError = fnHandlerError(err);
+      res.status(resError.statusCode).send(resError);
+    }
 
-      // Everything went fine.
-      // req.files is array of `photos` files
-      // req.body will contain the text fields, if there were any
-      //console.log(req.files);
-      console.log("upload -> req.body", req.body);
-      res.end("Files are uploaded");
-    });
-  } catch (error) {
-    // An unknown error occurred when uploading.
-    let resError = fnHandlerError(err);
-    console.log(resError);
-    return res.status(resError.statusCode).send(resError);
-  }
+    // Everything went fine.
+    res.status(200).end();
+  });
 });
 
 module.exports = router;
