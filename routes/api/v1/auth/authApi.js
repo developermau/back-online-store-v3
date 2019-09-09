@@ -14,7 +14,7 @@ var CONFIG = require("../../../../config/jwtConfig");
 // HTTP CODES
 var Util = require("../../util/httpcodes");
 // Handler Error
-var fnHandlerError = require("../../util/handlers");
+var fnHandlerError = require("../../util/handlersApi");
 // Expiration Time
 var expirationTime = "24h";
 

@@ -6,7 +6,7 @@ var models = require("../../../models");
 // HTTP CODES
 var Util = require("../util/httpcodes");
 // Handler Error
-var fnHandlerError = require("../util/handlers");
+var fnHandlerError = require("../util/handlersApi");
 
 // Nombre del modelo
 const NAME_MODEL = "CATEGORIA";
