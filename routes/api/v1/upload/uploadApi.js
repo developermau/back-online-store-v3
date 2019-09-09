@@ -18,9 +18,11 @@ var storage = multer.diskStorage({
 
 var multerWithStorage = multer({ storage: storage });
 
-router.post("/photos", function(req, res, next) {
+router.post("/:nameSection", function(req, res, next) {
   var limitMaxCountFiles = 5;
-  var upload = multerWithStorage.array("photos", limitMaxCountFiles);
+  var nameSection = req.params.nameSection;
+  console.log("nameSection", nameSection);
+  var upload = multerWithStorage.array(nameSection, limitMaxCountFiles);
 
   upload(req, res, function(err) {
     if (err instanceof multer.MulterError) {
