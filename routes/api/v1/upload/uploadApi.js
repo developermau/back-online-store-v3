@@ -18,9 +18,9 @@ var storage = multer.diskStorage({
 
 var multerWithStorage = multer({ storage: storage });
 
-var upload = multerWithStorage.array("photos", 12);
-
 router.post("/photos/upload", function(req, res, next) {
+  var upload = multerWithStorage.array("photos", 12);
+
   upload(req, res, function(err) {
     if (err instanceof multer.MulterError) {
       console.log(err);
