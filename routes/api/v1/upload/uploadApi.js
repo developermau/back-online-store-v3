@@ -5,7 +5,7 @@ var multer = require("multer");
 var fs = require("fs"); // Nodejs middleware for handling the file system
 
 // Handler Error
-var fnHandlerError = require("../../util/handlersApi");
+var fnHandlerErrorMulter = require("../../util/handlersErrorMulter");
 
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -19,18 +19,19 @@ var storage = multer.diskStorage({
 var multerWithStorage = multer({ storage: storage });
 
 router.post("/photos/upload", function(req, res, next) {
-  var upload = multerWithStorage.array("photos", 12);
+  var limitMaxCountFiles = 5;
+  var upload = multerWithStorage.array("photos", limitMaxCountFiles);
 
   upload(req, res, function(err) {
     if (err instanceof multer.MulterError) {
       console.log(err);
       // A Multer error occurred when uploading.
-      let resError = fnHandlerError(err);
+      let resError = fnHandlerErrorMulter(err);
       res.status(resError.statusCode).send(resError);
     } else if (err) {
       console.log(err);
       // An unknown error occurred when uploading.
-      let resError = fnHandlerError(err);
+      let resError = fnHandlerErrorMulter(err);
       res.status(resError.statusCode).send(resError);
     }
 
