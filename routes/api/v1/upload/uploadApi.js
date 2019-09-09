@@ -17,13 +17,15 @@ router.post("/:nameSection", function(req, res, next) {
 
   var storage = multer.diskStorage({
     destination: function(req, file, cb) {
-      if (!fs.existsSync(path)) {
-        // Not exists the directory
-        fs.mkdir(path, { recursive: true }, err => {
+      if (fs.existsSync(path)) {
+        console.log("El directorio esta listo para subir archivos.");
+      } else {
+        fs.mkdirSync(path, { recursive: true }, err => {
           if (err) {
             let resError = fnHandlerError(err);
             res.status(resError.statusCode).send(resError);
           }
+          console.log("El directorio fue creado y esta listo para subir archivos.");
         });
       }
       cb(null, path);
