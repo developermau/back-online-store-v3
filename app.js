@@ -1,6 +1,8 @@
-const host = "localhost";
-const port = 9090;
+var serverConfig = require("./config/serverConfig");
+const host = serverConfig.HOST;
+const port = serverConfig.PORT;
 
+// Express
 var express = require("express");
 var logger = require("morgan");
 var bodyParser = require("body-parser");
