@@ -1,5 +1,6 @@
-const host = "localhost";
-const port = 9090;
+var serverConfig = require("../../../config/serverConfig");
+const host = serverConfig.HOST;
+const port = serverConfig.PORT;
 
 var express = require("express");
 var router = express.Router();
