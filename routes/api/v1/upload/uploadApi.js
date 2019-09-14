@@ -1,25 +1,46 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 // Handler Error
-var fnHandlerError = require("../../util/handlersApi");
+const fnHandlerError = require("../../util/handlersApi");
 // Multer: Uploader
-var fnGetUploadWithDiskStorage = require("../../util/MulterUpload");
+const fnGetUploadWithDiskStorage = require("../../util/MulterUpload");
 
-var basePath = "./public/uploads";
-var fieldName = "fotografias";
-var limitMaxCountFiles = 3;
+const basePath = "./public/uploads";
+const fieldName = "fotografias";
+const fullPath = `${basePath}/${fieldName}`;
+const limitMaxCountFiles = 5;
 
-var upload = fnGetUploadWithDiskStorage(basePath, fieldName);
+var upload = fnGetUploadWithDiskStorage(fullPath);
 
-router.post("/", upload.array(fieldName, limitMaxCountFiles), fnSaveDB);
-
-function fnSaveDB(req, res, err) {
-  const fullPath = `${basePath}/${fieldName}`;
+router.post("/", upload.array(fieldName, limitMaxCountFiles), function(
+  req,
+  res,
+  err
+) {
   const files = req.files;
+
   console.log("fullPath", fullPath);
-  console.log("files", files);
+
+  const pr_producto = 100;
+  const pr_nombre = "Producto x";
+
+  files.forEach(file => {
+    const fo_ubicacion = `${file.destination}/${file.originalname}`;
+
+    const fotografia = {
+      fo_title: `Fotografia del producto ${pr_nombre}`,
+      fo_ubicacion: fo_ubicacion,
+      fo_flex: 6,
+      pr_producto: pr_producto,
+      // Audit
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    console.log("fotografia", fotografia);
+  });
+
   res.status(200).send({ msg: "Se subio los archivos correctamente." });
-}
+});
 
 // Exports router
 module.exports = router;
