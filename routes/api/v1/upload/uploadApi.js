@@ -4,7 +4,9 @@ var router = express.Router();
 //  middleware for handling multipart/form-data,
 var multer = require("multer");
 var MulterError = multer.MulterError;
-var fs = require("fs"); // Nodejs middleware for handling the file system
+
+// Multer Storage
+var fnBuildDiskStorage = require("../../util/MulterStorages");
 
 // Handler Error
 var fnHandlerErrorMulter = require("../../util/handlersErrorMulter");
@@ -28,8 +30,7 @@ router.post("/:nameSection", function(req, res, next) {
     var basePath = "./public/uploads";
     var fullPath = `${basePath}/${nameSection}`;
 
-    // Build storage
-    const DiskStorage = buildDiskStorage(fullPath);
+    const DiskStorage = fnBuildDiskStorage(fullPath);
 
     var limitMaxCountFiles = 5;
     var multerWithStorage = multer({ storage: DiskStorage });
@@ -60,33 +61,6 @@ router.post("/:nameSection", function(req, res, next) {
   }
 });
 console.log("\n\n\n\n=====================================");
-
-/**
- * Build a Multer Disk Storage Object
- *
- * @param {String} fullPath
- * @return Storage
- */
-function buildDiskStorage(fullPath) {
-  console.log("fullPath", fullPath);
-
-  var Storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-      console.log("file", file);
-      if (fs.existsSync(fullPath)) {
-        console.log("El directorio esta listo para subir archivos.");
-      } else {
-        fs.mkdirSync(fullPath, { recursive: true });
-      }
-      cb(null, fullPath);
-    },
-    filename: function(req, file, cb) {
-      cb(null, file.originalname);
-    }
-  });
-
-  return Storage;
-}
 
 // Exports router
 module.exports = router;
