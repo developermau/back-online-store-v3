@@ -1,3 +1,6 @@
+const host = "localhost";
+const port = 9090;
+
 var express = require("express");
 var router = express.Router();
 
@@ -233,7 +236,10 @@ function fnSaveDBFotografiaByProducto(pr_producto, FileToSave) {
 function fnBuildFotografia(pr_producto, FileFotografia) {
   const file = FileFotografia;
   const fileName = file.originalname;
-  const fo_ubicacion = `${file.destination}/${fileName}`;
+  const uploadPath = `${file.destination}/${fileName}`;
+  const ubicacionParcial = uploadPath.replace("./", "");
+
+  const fo_ubicacion = `http://${host}:${port}/${ubicacionParcial}`;
 
   return {
     fo_title: fileName,
