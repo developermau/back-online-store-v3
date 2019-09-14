@@ -21,7 +21,7 @@ var cpUpload = upload.fields([
   { name: fieldName, maxCount: limitMaxCountFiles }
 ]);
 */
-router.post("/", upload.fields([{ name: fieldName, maxCount: limitMaxCountFiles }]), fnSaveDB);
+router.post("/", upload.array(fieldName, limitMaxCountFiles), fnSaveDB);
 
 function fnCpUpload(req, res, next) {
   var middleware = null;
