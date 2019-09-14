@@ -11,32 +11,29 @@ var fnHandlerErrorMulter = require("../../util/handlersErrorMulter");
 var fnHandlerError = require("../../util/handlersApi");
 
 router.post("/:nameSection", function(req, res, next) {
-  try {
+  var nameSection = req.params.nameSection;
+
+  if (
+    nameSection === null ||
+    nameSection === undefined ||
+    nameSection.length === 0
+  ) {
+    const err = {
+      name: "Express",
+      message: "No se paso el parametro 'nameSection'"
+    };
+    let resError = fnHandlerError(err);
+    res.status(resError.statusCode).send(resError);
+  } else {
+    var basePath = "./public/uploads";
+    var fullPath = `${basePath}/${nameSection}`;
+
+    // Build storage
+    const DiskStorage = buildDiskStorage(fullPath);
+
     var limitMaxCountFiles = 5;
-    var nameSection = req.params.nameSection;
-    var path = "./public/uploads/" + nameSection;
-
+    var multerWithStorage = multer({ storage: DiskStorage });
     console.log("nameSection", nameSection);
-    console.log("path", path);
-
-    var storage = multer.diskStorage({
-      destination: function(req, file, cb) {
-        console.log("file", file);
-        if (fs.existsSync(path)) {
-          console.log("El directorio esta listo para subir archivos.");
-        } else {
-          console.log("El directorio no existe.");
-          fs.mkdirSync(path, { recursive: true });
-        }
-        cb(null, path);
-      },
-      filename: function(req, file, cb) {
-        console.log("file", file);
-        cb(null, file.originalname);
-      }
-    });
-
-    var multerWithStorage = multer({ storage: storage });
 
     var upload = multerWithStorage.array(nameSection, limitMaxCountFiles);
 
@@ -45,24 +42,51 @@ router.post("/:nameSection", function(req, res, next) {
       if (err instanceof MulterError) {
         console.log(err);
         // A Multer error occurred when uploading.
-        let resError = fnHandlerErrorMulter(err, path, limitMaxCountFiles);
+        let resError = fnHandlerErrorMulter(err, fullPath, limitMaxCountFiles);
         res.status(resError.statusCode).send(resError);
       } else if (err) {
         console.log(err);
         // An unknown error occurred when uploading.
-        let resError = fnHandlerErrorMulter(err, path, limitMaxCountFiles);
+        let resError = fnHandlerErrorMulter(err, fullPath, limitMaxCountFiles);
         res.status(resError.statusCode).send(resError);
       }
 
-      console.log("Path", path)
+      console.log("FullPath", fullPath);
       console.log("req.files", req.files);
 
       // Everything went fine.
       res.status(200).json({ msg: "Archivo se subio correctamente" });
     });
-  } catch (error) {
-    console.error('error', error);
   }
 });
 console.log("\n\n\n\n=====================================");
+
+/**
+ * Build a Multer Disk Storage Object
+ *
+ * @param {String} fullPath
+ * @return Storage
+ */
+function buildDiskStorage(fullPath) {
+  console.log("fullPath", fullPath);
+
+  var Storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+      console.log("file", file);
+      if (fs.existsSync(fullPath)) {
+        console.log("El directorio esta listo para subir archivos.");
+      } else {
+        fs.mkdirSync(fullPath, { recursive: true });
+      }
+      cb(null, fullPath);
+    },
+    filename: function(req, file, cb) {
+      cb(null, file.originalname);
+    }
+  });
+
+  return Storage;
+}
+
+// Exports router
 module.exports = router;
