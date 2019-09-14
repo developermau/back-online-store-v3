@@ -24,7 +24,8 @@ router.post("/", upload.array(fieldName, limitMaxCountFiles), function(
   const pr_producto = 100;
   const pr_nombre = "Producto x";
 
-  files.forEach(file => {
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
     const fo_ubicacion = `${file.destination}/${file.originalname}`;
 
     const fotografia = {
@@ -37,7 +38,7 @@ router.post("/", upload.array(fieldName, limitMaxCountFiles), function(
       updatedAt: new Date()
     };
     console.log("fotografia", fotografia);
-  });
+  }
 
   res.status(200).send({ msg: "Se subio los archivos correctamente." });
 });
