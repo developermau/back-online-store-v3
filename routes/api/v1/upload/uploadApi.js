@@ -21,18 +21,22 @@ var cpUpload = upload.fields([
   { name: fieldName, maxCount: limitMaxCountFiles }
 ]);
 */
-router.post("/", fnCpUpload, fnSaveDB);
+router.post("/", upload.fields([{ name: fieldName, maxCount: limitMaxCountFiles }]), fnSaveDB);
 
 function fnCpUpload(req, res, next) {
-  var result = next(null);
+  var middleware = null;
+  var hasError = true;
+
   try {
-    return upload.fields([{ name: fieldName, maxCount: limitMaxCountFiles }]);
+    upload.fields([{ name: fieldName, maxCount: limitMaxCountFiles }]);
+    next();
   } catch (error) {
-    return next(error);
+    next(error);
   }
 }
 
-function fnSaveDB(req, res) {
+function fnSaveDB(req, res, err) {
+  console.log("err", err);
   console.log("req", req);
   console.log("res", res);
 
@@ -54,6 +58,7 @@ function fnSaveDB(req, res) {
   console.log("fullPath", fullPath);
   console.log(req.files);
   res.status(200).send("ok");
+  return;
 }
 
 function fnBuildMulterUpload(basePath, fieldName) {
