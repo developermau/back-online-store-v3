@@ -13,10 +13,9 @@ var fnHandlerErrorMulter = require("../../util/handlersErrorMulter");
 var fnHandlerError = require("../../util/handlersApi");
 
 var basePath = "./public/uploads";
+var nameSection = "fotografias";
 
-router.post("/:nameSection", function(req, res, next) {
-  var nameSection = req.params.nameSection;
-
+router.post("/", function(req, res, next) {
   if (
     nameSection === null ||
     nameSection === undefined ||
@@ -29,13 +28,13 @@ router.post("/:nameSection", function(req, res, next) {
     let resError = fnHandlerError(err);
     res.status(resError.statusCode).send(resError);
   } else {
+    console.log("nameSection", nameSection);
     var fullPath = `${basePath}/${nameSection}`;
 
     const DiskStorage = fnBuildDiskStorage(fullPath);
 
     var limitMaxCountFiles = 5;
     var multerWithStorage = multer({ storage: DiskStorage });
-    console.log("nameSection", nameSection);
 
     var upload = multerWithStorage.array(nameSection, limitMaxCountFiles);
 
