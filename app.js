@@ -42,7 +42,7 @@ app.use(function(err, req, res, next) {
     res.status(resError.statusCode).send(resError);
   } else if (err) {
     // An unknown error occurred when uploading.
-    let resError = fnHandlerErrorMulter(err);
+    let resError = fnHandlerError(err);
     res.status(resError.statusCode).send(resError);
   }
 });

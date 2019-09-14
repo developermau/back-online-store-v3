@@ -14,7 +14,7 @@ var fnHandlerError = require("../../util/handlersApi");
 var basePath = "./public/uploads";
 var fieldName = "fotografias";
 var upload = fnBuildMulterUpload(basePath, "fotografias");
-var limitMaxCountFiles = 2;
+var limitMaxCountFiles = 3;
 
 /*
 var cpUpload = upload.fields([
@@ -57,7 +57,7 @@ function fnSaveDB(req, res, err) {
 
   var fullPath = `${basePath}/${fieldName}`;
   console.log("fullPath", fullPath);
-  console.log(req.files);
+  console.log('req.files', req.files);
   res.status(200).send("ok");
   console.log("\n\n\n\n===========")
   return;
