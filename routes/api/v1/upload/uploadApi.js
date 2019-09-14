@@ -2,7 +2,6 @@ var express = require("express");
 var router = express.Router();
 //  middleware for handling multipart/form-data,
 var multer = require("multer");
-var MulterError = multer.MulterError;
 
 // Multer Storage
 var fnBuildDiskStorage = require("../../util/MulterStorages");
@@ -16,51 +15,14 @@ var fieldName = "fotografias";
 var upload = fnBuildMulterUpload(basePath, "fotografias");
 var limitMaxCountFiles = 3;
 
-/*
-var cpUpload = upload.fields([
-  { name: fieldName, maxCount: limitMaxCountFiles }
-]);
-*/
 router.post("/", upload.array(fieldName, limitMaxCountFiles), fnSaveDB);
 
-function fnCpUpload(req, res, next) {
-  var middleware = null;
-  var hasError = true;
-
-  try {
-    upload.fields([{ name: fieldName, maxCount: limitMaxCountFiles }]);
-    next();
-  } catch (error) {
-    next(error);
-  }
-}
-
 function fnSaveDB(req, res, err) {
-  console.log("\n\n\n\n===========")
-  console.log("err", err);
-  console.log("req", req);
-  console.log("res", res);
-
-  /*
-  if (err instanceof MulterError) {
-    console.log(err);
-    // A Multer error occurred when uploading.
-    let resError = fnHandlerErrorMulter(err, fullPath, limitMaxCountFiles);
-    res.status(resError.statusCode).send(resError);
-  } else if (err) {
-    console.log(err);
-    // An unknown error occurred when uploading.
-    let resError = fnHandlerErrorMulter(err, fullPath, limitMaxCountFiles);
-    res.status(resError.statusCode).send(resError);
-  }
-  */
-
-  var fullPath = `${basePath}/${fieldName}`;
+  const fullPath = `${basePath}/${fieldName}`;
+  const files = req.files;
   console.log("fullPath", fullPath);
-  console.log('req.files', req.files);
-  res.status(200).send("ok");
-  console.log("\n\n\n\n===========")
-  return;
+  console.log("files", files);
+  res.status(200).send({ msg: "Se subio los archivos correctamente." });
 }
 
 function fnBuildMulterUpload(basePath, fieldName) {
