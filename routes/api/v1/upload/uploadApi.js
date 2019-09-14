@@ -3,6 +3,7 @@ var express = require("express");
 var router = express.Router();
 //  middleware for handling multipart/form-data,
 var multer = require("multer");
+var MulterError = multer.MulterError;
 var fs = require("fs"); // Nodejs middleware for handling the file system
 
 // Handler Error
@@ -13,7 +14,7 @@ router.post("/:nameSection", function(req, res, next) {
   try {
     var limitMaxCountFiles = 5;
     var nameSection = req.params.nameSection;
-    var path = "./uploads/" + nameSection;
+    var path = "./public/uploads/" + nameSection;
 
     console.log("nameSection", nameSection);
     console.log("path", path);
@@ -25,15 +26,7 @@ router.post("/:nameSection", function(req, res, next) {
           console.log("El directorio esta listo para subir archivos.");
         } else {
           console.log("El directorio no existe.");
-          fs.mkdirSync(path, { recursive: true }, err => {
-            if (err) {
-              let resError = fnHandlerError(err);
-              res.status(resError.statusCode).send(resError);
-            }
-            console.log(
-              "El directorio fue creado y esta listo para subir archivos."
-            );
-          });
+          fs.mkdirSync(path, { recursive: true });
         }
         cb(null, path);
       },
@@ -49,22 +42,26 @@ router.post("/:nameSection", function(req, res, next) {
 
     upload(req, res, function(err) {
       console.log("upload.....");
-      console.log(err);
-      if (err instanceof multer.MulterError) {
+      if (err instanceof MulterError) {
+        console.log(err);
         // A Multer error occurred when uploading.
         let resError = fnHandlerErrorMulter(err, path, limitMaxCountFiles);
         res.status(resError.statusCode).send(resError);
       } else if (err) {
+        console.log(err);
         // An unknown error occurred when uploading.
         let resError = fnHandlerErrorMulter(err, path, limitMaxCountFiles);
         res.status(resError.statusCode).send(resError);
       }
 
+      console.log("Path", path)
+      console.log("req.files", req.files);
+
       // Everything went fine.
       res.status(200).json({ msg: "Archivo se subio correctamente" });
     });
   } catch (error) {
-    console.error(error);
+    console.error('error', error);
   }
 });
 console.log("\n\n\n\n=====================================");
