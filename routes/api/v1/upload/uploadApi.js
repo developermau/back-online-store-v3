@@ -36,6 +36,7 @@ function fnCpUpload(req, res, next) {
 }
 
 function fnSaveDB(req, res, err) {
+  console.log("\n\n\n\n===========")
   console.log("err", err);
   console.log("req", req);
   console.log("res", res);
@@ -58,6 +59,7 @@ function fnSaveDB(req, res, err) {
   console.log("fullPath", fullPath);
   console.log(req.files);
   res.status(200).send("ok");
+  console.log("\n\n\n\n===========")
   return;
 }
 

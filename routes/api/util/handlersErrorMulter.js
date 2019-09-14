@@ -1,10 +1,11 @@
 // HTTP CODES
 var Util = require("./httpcodes");
 
-var fnHandlerErrorMulter = function(err, folderUploads, maxLimitFiles) {
-  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+var fnHandlerErrorMulter = function(err) {
+  console.log(":( :( :( :(");
   console.log("\n\n fnHandlerErrorMulter err: ");
   console.log(err);
+  console.log("\n\n :(:(:(:( ");
 
   let result = {
     nameError: "MulterError",
@@ -24,15 +25,13 @@ var fnHandlerErrorMulter = function(err, folderUploads, maxLimitFiles) {
     switch (err.code) {
       case "LIMIT_FILE_COUNT":
         result.message =
-          "Se estan subiendo mas archivos de los permitidos a la vez, que es " +
-          maxLimitFiles +
-          " archivo(s)";
+          "Se estan subiendo mas archivos de los permitidos a la vez";
         break;
       case "LIMIT_UNEXPECTED_FILE":
         result.message = `El campo ${err.field} no existe, por favor reviselo`;
         break;
       case "ENOENT":
-        result.message = "El folder " + folderUploads + " no existe";
+        result.message = "El folder para guardar los archivos no existe";
         break;
       default:
         result.message = "Error, al subir el archivo";

@@ -6,6 +6,9 @@ var cors = require("cors");
 var passport = require("./passport/jwt-passport");
 // List endpoints
 const listEndpoints = require("express-list-endpoints");
+//  middleware for handling multipart/form-data,
+var multer = require("multer");
+var MulterError = multer.MulterError;
 
 var app = express();
 
@@ -27,6 +30,22 @@ fnBuildAuthApiByVersion(app, VERSION_API_REST);
 fnBuildModelApiByVersion(app, VERSION_API_REST);
 fnBuildRelacionApiByVersion(app, VERSION_API_REST);
 fnBuildUploadApiByVersion(app, VERSION_API_REST);
+
+// Handler Error
+var fnHandlerErrorMulter = require("./routes/api/util/handlersErrorMulter");
+var fnHandlerError = require("./routes/api/util/handlersApi");
+
+app.use(function(err, req, res, next) {
+  if (err instanceof MulterError) {
+    // A Multer error occurred when uploading.
+    let resError = fnHandlerErrorMulter(err);
+    res.status(resError.statusCode).send(resError);
+  } else if (err) {
+    // An unknown error occurred when uploading.
+    let resError = fnHandlerErrorMulter(err);
+    res.status(resError.statusCode).send(resError);
+  }
+});
 
 console.log(listEndpoints(app));
 
