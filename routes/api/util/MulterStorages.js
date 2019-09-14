@@ -12,12 +12,11 @@ var fs = require("fs");
 function fnBuildDiskStorage(fullPath) {
   var Storage = multer.diskStorage({
     destination: function(req, file, cb) {
-      if (fs.existsSync(fullPath)) {
+      if (!fs.existsSync(fullPath)) {
+        fs.mkdirSync(fullPath, { recursive: true });
         console.log(
           `El directorio ${fullPath} esta listo para subir archivos.`
         );
-      } else {
-        fs.mkdirSync(fullPath, { recursive: true });
       }
       cb(null, fullPath);
     },
