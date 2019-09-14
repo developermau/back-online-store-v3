@@ -17,12 +17,11 @@ router.post("/", upload.array(fieldName, limitMaxCountFiles), function(
   res,
   err
 ) {
-  const files = req.files;
-
-  console.log("fullPath", fullPath);
-
   const pr_producto = 100;
   const pr_nombre = "Producto x";
+
+
+  const files = req.files;
 
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
@@ -38,6 +37,8 @@ router.post("/", upload.array(fieldName, limitMaxCountFiles), function(
       updatedAt: new Date()
     };
     console.log("fotografia", fotografia);
+
+    
   }
 
   res.status(200).send({ msg: "Se subio los archivos correctamente." });
