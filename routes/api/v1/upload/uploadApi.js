@@ -12,6 +12,8 @@ var fnBuildDiskStorage = require("../../util/MulterStorages");
 var fnHandlerErrorMulter = require("../../util/handlersErrorMulter");
 var fnHandlerError = require("../../util/handlersApi");
 
+var basePath = "./public/uploads";
+
 router.post("/:nameSection", function(req, res, next) {
   var nameSection = req.params.nameSection;
 
@@ -27,7 +29,6 @@ router.post("/:nameSection", function(req, res, next) {
     let resError = fnHandlerError(err);
     res.status(resError.statusCode).send(resError);
   } else {
-    var basePath = "./public/uploads";
     var fullPath = `${basePath}/${nameSection}`;
 
     const DiskStorage = fnBuildDiskStorage(fullPath);
