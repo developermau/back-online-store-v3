@@ -2,6 +2,9 @@ var express = require("express");
 var logger = require("morgan");
 var bodyParser = require("body-parser");
 var cors = require("cors");
+var path = require("path");
+const fs = require("fs");
+var serveIndex = require("serve-index");
 // Passport configured
 var passport = require("./passport/jwt-passport");
 // List endpoints
@@ -18,6 +21,22 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 app.use(passport.initialize());
 app.use(passport.session());
+//app.use(express.static(path.join(__dirname, 'public')))
+//app.use('/fotografias', serveIndex(__dirname + '/uploads/fotografias'));
+//app.use('/static', express.static('public'));
+//app.use(express.directory(__dirname + "/public"));
+app.use('/public/uploads/fotografias', express.static(path.join(__dirname, 'public/uploads/fotografias')))
+fs.readdir(path.join(__dirname, 'public/uploads/fotografias'), function (err, files) {
+  //handling error
+  if (err) {
+      return console.log('Unable to scan directory: ' + err);
+  } 
+  //listing all files using forEach
+  files.forEach(function (file) {
+      // Do whatever you want to do with the file
+      console.log(file); 
+  });
+});
 
 // Routes: Index
 var indexRouter = require("./routes/index");
