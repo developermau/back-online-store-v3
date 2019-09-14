@@ -107,7 +107,7 @@ router.post("/", function(req, res, next) {
 router.post(
   "/:pr_producto/uploads",
   upload.array("fotografias", limitMaxCountFiles),
-  function(req, res, err) {
+  async function(req, res, err) {
     const OPERACION = "CREATE";
     console.log(`\n${NAME_MODEL}:${OPERACION}`);
 
@@ -115,15 +115,25 @@ router.post(
     let pr_producto = req.params.pr_producto;
 
     const files = req.files;
+    const fotografias = [];
 
     for (let i = 0; i < files.length; i++) {
-      fnSaveDBFotografiaByProducto(pr_producto, files[i]);
+      const fotografiaRegister = fnBuildFotografia(pr_producto, files[i]);
+
+      try {
+        const response = await fotografiaModel.create(fotografiaRegister);
+        const fotografia = response.dataValues;
+        fotografias.push(fotografia);
+      } catch (error) {
+        let resError = fnHandlerError(err);
+        console.log(resError);
+      }
     }
 
     let resCreated = {
       statusCode: Util.HttpCodes.HTTP_201_CREATED,
       msg: `Fotografias se subieron exitosamente`,
-      data: files
+      fotografias: fotografias
     };
     res.status(resCreated.statusCode).json(resCreated);
   }
@@ -223,15 +233,23 @@ router.delete("/:fo_fotografia", function(req, res, next) {
  *
  * @param {File} FileToSave
  */
-function fnSaveDBFotografiaByProducto(pr_producto, FileToSave) {
+async function fnSaveDBFotografiaByProducto(pr_producto, FileToSave) {
   const fotografiaRegister = fnBuildFotografia(pr_producto, FileToSave);
   console.log(fotografiaRegister);
 
+  const { response } = await fotografiaModel.create(fotografiaRegister);
+  return response;
+  /*
+  console.log(
+    `Fotografia guarda exitosamente ${fotografia.fo_title} en ${fotografia.fo_ubicacion}`
+  );
+  */
+
+  /*
   fotografiaModel.create(fotografiaRegister).then(fotografia => {
-    console.log(
-      `Fotografia guarda exitosamente ${fotografia.fo_title} en ${fotografia.fo_ubicacion}`
-    );
+    
   });
+  */
 }
 
 function fnBuildFotografia(pr_producto, FileFotografia) {
