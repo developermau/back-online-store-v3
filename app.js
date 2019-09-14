@@ -82,5 +82,5 @@ function fnBuildRelacionApiByVersion(app, version) {
 
 function fnBuildUploadApiByVersion(app, version) {
   var uploadRouter = require(`./routes/api/${version}/upload/uploadApi`);
-  app.use(`/api/${version}/upload`, uploadRouter);
+  app.use(`/api/${version}/uploads`, uploadRouter);
 }
