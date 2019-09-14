@@ -1,3 +1,6 @@
+const host = "localhost";
+const port = 9090;
+
 var express = require("express");
 var logger = require("morgan");
 var bodyParser = require("body-parser");
@@ -25,16 +28,22 @@ app.use(passport.session());
 //app.use('/fotografias', serveIndex(__dirname + '/uploads/fotografias'));
 //app.use('/static', express.static('public'));
 //app.use(express.directory(__dirname + "/public"));
-app.use('/public/uploads/fotografias', express.static(path.join(__dirname, 'public/uploads/fotografias')))
-fs.readdir(path.join(__dirname, 'public/uploads/fotografias'), function (err, files) {
+app.use(
+  "/public/uploads/fotografias",
+  express.static(path.join(__dirname, "public/uploads/fotografias"))
+);
+fs.readdir(path.join(__dirname, "public/uploads/fotografias"), function(
+  err,
+  files
+) {
   //handling error
   if (err) {
-      return console.log('Unable to scan directory: ' + err);
-  } 
+    return console.log("Unable to scan directory: " + err);
+  }
   //listing all files using forEach
-  files.forEach(function (file) {
-      // Do whatever you want to do with the file
-      console.log(file); 
+  files.forEach(function(file) {
+    // Do whatever you want to do with the file
+    console.log(file);
   });
 });
 
@@ -69,8 +78,6 @@ app.use(function(err, req, res, next) {
 console.log(listEndpoints(app));
 
 // Listen
-const host = "localhost";
-const port = 9090;
 app.listen(port, host, function() {
   console.log(`Server is running on http://${host}:${port}`);
 });
