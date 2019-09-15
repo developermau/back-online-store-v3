@@ -94,4 +94,47 @@ router.post("/", function(req, res, next) {
     });
 });
 
+/**
+ * DELETE: Elimina una relacion relGusta
+ */
+router.delete("/", function(req, res, next) {
+  const OPERACION = "DELETE";
+  const CAMPO = "POR ID";
+  console.log(`\n${OPERACION}:${NAME_MODEL} ${CAMPO}`);
+
+  // Request Data
+  let relGustaRegister = req.body;
+  let { us_usuario, pr_producto } = req.body;
+
+  console.log("relGustaRegister", relGustaRegister);
+  console.log("us_usuario", us_usuario);
+  console.log("pr_producto", pr_producto);
+
+  relGustaModel
+    .destroy({
+      where: relGustaRegister
+    })
+    .then(function(quantityRowsDestroyed) {
+      // Respuesta
+      var statusCode = Util.HttpCodes.HTTP_200_OK;
+      var msg = "Relación 'Gusta' eliminada exitosamente";
+
+      if (quantityRowsDestroyed === 0) {
+        statusCode = Util.HttpCodes.HTTP_404_NOT_FOUND;
+        msg = `Relación 'Gusta' no encontrada, para el usuario ${us_usuario} y el producto ${pr_producto}`;
+      }
+
+      let resDestroy = {
+        statusCode,
+        msg
+      };
+      res.status(resDestroy.statusCode).json(resDestroy);
+    })
+    .catch(err => {
+      let resError = fnHandlerError(err);
+      console.log(resError);
+      res.status(resError.statusCode).send(resError);
+    });
+});
+
 module.exports = router;
