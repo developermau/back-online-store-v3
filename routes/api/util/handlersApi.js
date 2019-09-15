@@ -2,22 +2,11 @@
 var Util = require("../util/httpcodes");
 
 var fnHandlerError = function(err) {
-  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-  console.log("\n\n fnHandlerError err: ");
-  console.log(err);
-
-  let result = {
-    errorTypeName: "GENERAL",
-    errorTypeDetail: err.message,
-    nameError: err.name,
-    statusCode: Util.HttpCodes.HTTP_500_INTERNAL_SERVER_ERROR,
-    sqlState: "",
-    parentCode: "",
-    table: "",
-    code: "",
-    errno: 0,
-    myValidationErrors: []
-  };
+  let resultError = Object.assign({}, err);
+  resultError.errorTypeName = "GENERAL";
+  resultError.errorTypeDetail = err.message;
+  resultError.statusCode = Util.HttpCodes.HTTP_500_INTERNAL_SERVER_ERROR;
+  resultError.myValidationErrors = [];
 
   // Auxiliares
   let errorsList = [];
@@ -30,83 +19,91 @@ var fnHandlerError = function(err) {
     original = err.original;
     parent = err.parent;
 
-    console.log("original-->", original);
-    console.log("parent-->", parent);
-
     if (original !== null && original !== undefined) {
-      result.code = original.code;
-      result.sqlState = original.sqlState;
-      result.sqlMessage = original.sqlMessage;
-      result.errno = original.errno;
+      resultError.code = original.code;
+      resultError.sqlState = original.sqlState;
+      resultError.sqlMessage = original.sqlMessage;
+      resultError.errno = original.errno;
     }
 
     if (parent !== undefined && parent !== null) {
-      result.code = parent.code;
-      result.parentDetail = parent.detail;
-      result.sqlState = parent.sqlState;
-      result.sqlMessage = parent.message;
-      result.table = parent.table;
-      result.errno = parent.errno;
+      resultError.code = parent.code;
+      resultError.parentDetail = parent.detail;
+      resultError.sqlState = parent.sqlState;
+      resultError.sqlMessage = parent.message;
+      resultError.errno = parent.errno;
     }
 
     if (errorsList !== null && errorsList !== undefined) {
       if (Array.isArray(errorsList)) {
         errorsList.forEach(error => {
-          result.myValidationErrors.push(error);
+          resultError.myValidationErrors.push(error);
         });
       }
     }
 
-    switch (result.nameError) {
+    switch (resultError.name) {
       case "SequelizeDatabaseError":
-        result.statusCode = Util.HttpCodes.HTTP_400_BAD_REQUEST;
+        resultError.statusCode = Util.HttpCodes.HTTP_400_BAD_REQUEST;
 
-        if (result.sqlState >= 23000 && result.sqlState <= 23999) {
-          result.errorTypeName = "Integrity constraint violation";
-          result.errorTypeDetail =
+        if (resultError.sqlState >= 23000 && resultError.sqlState <= 23999) {
+          resultError.errorTypeName = "Integrity constraint violation";
+          resultError.errorTypeDetail =
             "Registro duplicado en la columna " + err.errors[0].path;
-        } else if (result.sqlState >= 22000 && result.sqlState <= 22999) {
-          result.errorTypeName = "Data exception";
-          result.errorTypeDetail = "Valores numericos fuera de rango";
-        } else if (result.sqlState >= 1000 && result.sqlState <= 1999) {
-          result.errorTypeName = "Warning";
-          result.errorTypeDetail = "Valores numericos fuera de rango";
+        } else if (
+          resultError.sqlState >= 22000 &&
+          resultError.sqlState <= 22999
+        ) {
+          resultError.errorTypeName = "Data exception";
+          resultError.errorTypeDetail = "Valores numericos fuera de rango";
+        } else if (
+          resultError.sqlState >= 1000 &&
+          resultError.sqlState <= 1999
+        ) {
+          resultError.errorTypeName = "Warning";
+          resultError.errorTypeDetail = "Valores numericos fuera de rango";
         } else {
-          result.errorTypeDetail = "SQL." + result.sqlMessage;
+          resultError.errorTypeDetail = "SQL." + resultError.sqlMessage;
         }
 
         break;
       case "SequelizeValidationError":
-        result.errorTypeName = "Validacion Sequelize";
-        result.statusCode = Util.HttpCodes.HTTP_428_PRECONDITION_REQUIRED;
-        result.errorTypeDetail = "Los valores que introdujo no son validos.";
+        resultError.errorTypeName = "Validacion Sequelize";
+        resultError.statusCode = Util.HttpCodes.HTTP_428_PRECONDITION_REQUIRED;
+        resultError.errorTypeDetail =
+          "Los valores que introdujo no son validos.";
         break;
       case "SequelizeUniqueConstraintError":
-        result.errorTypeName = "Validacion Sequelize UNIQUE";
-        result.statusCode = Util.HttpCodes.HTTP_409_CONFLICT;
+        resultError.errorTypeName = "Validacion Sequelize UNIQUE";
+        resultError.statusCode = Util.HttpCodes.HTTP_409_CONFLICT;
 
-        if (result.sqlMessage === null || result.sqlMessage === undefined) {
-          result.sqlMessage = "Error, con la BD";
+        if (
+          resultError.sqlMessage === null ||
+          resultError.sqlMessage === undefined
+        ) {
+          resultError.sqlMessage = "Error, con la BD";
         }
-        result.errorTypeDetail = "SQL." + result.sqlMessage;
+        resultError.errorTypeDetail = "SQL." + resultError.sqlMessage;
         break;
       case "SequelizeForeignKeyConstraintError":
-        result.errorTypeName = "Referencia con otras tablas";
-        result.statusCode = Util.HttpCodes.HTTP_409_CONFLICT;
-        result.errorTypeDetail =
-          "No se puede eliminar o actualizar el registro, existe dependencia con otras tablas";
+        let nameTableWithConflict = "";
+        if (resultError.index !== null && resultError.index !== undefined) {
+          // Fotografia_ibfk_1
+          nameTableWithConflict = resultError.index.replace("_ibfk_1", "");
+        }
+
+        resultError.errorTypeName = "Referencia con otras tablas";
+        resultError.statusCode = Util.HttpCodes.HTTP_409_CONFLICT;
+        resultError.errorTypeDetail = `No se puede eliminar o actualizar el registro, existe dependencia con otra(s) tabla(s) ${nameTableWithConflict}. Por favor debe revisarlas o eliminarlas primero`;
         break;
       default:
         console.error("Problema, no se identifico el error...");
-        result.statusCode = Util.HttpCodes.HTTP_500_INTERNAL_SERVER_ERROR;
+        resultError.statusCode = Util.HttpCodes.HTTP_500_INTERNAL_SERVER_ERROR;
         break;
     }
   }
 
-  console.log(result);
-  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
-  return result;
+  return resultError;
 };
 
 module.exports = fnHandlerError;
