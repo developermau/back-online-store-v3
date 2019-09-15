@@ -11,16 +11,16 @@ var fnHandlerError = require("../util/handlersApi");
 // Nombre del modelo
 const NAME_MODEL = "CATEGORIA";
 
+// MODEL: categoria
+let categoriaModel = models.Categoria;
+
+// MODEL: producto
+let productoModel = models.Producto;
+
 /* GET Lista de categorias */
 router.get("/", function(req, res, next) {
   const OPERACION = "LIST";
   console.log(`\n${NAME_MODEL}:${OPERACION}`);
-
-  // MODEL: categoria
-  let categoriaModel = models.Categoria;
-
-  // MODEL: producto
-  let productoModel = models.Producto;
 
   categoriaModel
     .findAll({
@@ -44,12 +44,6 @@ router.get("/:ca_categoria", function(req, res, next) {
 
   // ID
   var categoriaId = req.params.ca_categoria;
-
-  // MODEL: categoria
-  let categoriaModel = models.Categoria;
-
-  // MODEL: producto
-  let productoModel = models.Producto;
 
   categoriaModel
     .findByPk(categoriaId, {
@@ -77,13 +71,57 @@ router.get("/:ca_categoria", function(req, res, next) {
     });
 });
 
+/* GET Buscar todos los productos por categoria */
+router.get("/:ca_categoria/productos", function(req, res, next) {
+  const OPERACION = "FIND";
+  const CAMPO = "POR ID CATEGORIA";
+  console.log(`\n${OPERACION}:${NAME_MODEL} ${CAMPO}`);
+
+  // ID
+  var categoriaId = req.params.ca_categoria;
+
+  // MODEL: producto
+  let productoModel = models.Producto;
+
+  productoModel
+    .findAll({
+      where: {
+        ca_categoria: categoriaId
+      }
+    })
+    .then(function(productos) {
+      // Respuesta
+      let respuesta = {};
+
+      if (productos !== undefined && productos !== null) {
+        if (productos.length > 0) {
+          respuesta.statusCode = Util.HttpCodes.HTTP_200_OK;
+          respuesta.msg = "Busqueda de productos por categoria exitosa";
+          respuesta.productos = productos;
+        } else {
+          respuesta.statusCode = Util.HttpCodes.HTTP_404_NOT_FOUND;
+          respuesta.msg = `No hay productos en la categoria: ${categoriaId}`;
+          respuesta.productos = productos;
+        }
+      } else {
+        respuesta.statusCode = Util.HttpCodes.HTTP_404_NOT_FOUND;
+        respuesta.msg = `Problemas en la busqueda de productos en la categoria: ${categoriaId}`;
+        respuesta.productos = productos;
+      }
+
+      res.status(respuesta.statusCode).json(respuesta);
+    })
+    .catch(err => {
+      let resError = fnHandlerError(err);
+      console.log(resError);
+      res.status(resError.statusCode).send(resError);
+    });
+});
+
 /* POST: Creacion de un nuevo categoria  */
 router.post("/", function(req, res, next) {
   const OPERACION = "CREATE";
   console.log(`\n${NAME_MODEL}:${OPERACION}`);
-
-  // MODEL: categoria
-  let categoriaModel = models.Categoria;
 
   // Request Data
   let categoriaRegister = req.body;
@@ -115,9 +153,6 @@ router.put("/:us_categoria", function(req, res, next) {
 
   // Request Data
   let categoriaRegister = req.body;
-
-  // MODEL: categoria
-  let categoriaModel = models.Categoria;
 
   if (categoriaId !== undefined && categoriaId !== null) {
     categoriaModel
@@ -167,9 +202,6 @@ router.delete("/:us_categoria", function(req, res, next) {
 
   // ID
   var categoriaId = req.params.us_categoria;
-
-  // MODEL: categoria
-  let categoriaModel = models.Categoria;
 
   categoriaModel
     .destroy({
