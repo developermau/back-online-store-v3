@@ -29,6 +29,14 @@ module.exports = {
           us_usuario: 1,
           pr_producto: 5
         },
+        {
+          us_usuario: 2,
+          pr_producto: 5
+        },
+        {
+          us_usuario: 2,
+          pr_producto: 6
+        },
       ],
       {}
     );
