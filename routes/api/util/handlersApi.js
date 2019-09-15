@@ -85,14 +85,20 @@ var fnHandlerError = function(err) {
         result.errorTypeName = "Validacion Sequelize UNIQUE";
         result.statusCode = Util.HttpCodes.HTTP_409_CONFLICT;
 
-        if(result.sqlMessage === null || result.sqlMessage === undefined ){
+        if (result.sqlMessage === null || result.sqlMessage === undefined) {
           result.sqlMessage = "Error, con la BD";
         }
         result.errorTypeDetail = "SQL." + result.sqlMessage;
         break;
+      case "SequelizeForeignKeyConstraintError":
+        result.errorTypeName = "Referencia con otras tablas";
+        result.statusCode = Util.HttpCodes.HTTP_409_CONFLICT;
+        result.errorTypeDetail =
+          "No se puede eliminar o actualizar el registro, existe dependencia con otras tablas";
+        break;
       default:
         console.error("Problema, no se identifico el error...");
-        result.statusCode = Util.HttpCodes.HTTP_501_NOT_IMPLEMENTED;
+        result.statusCode = Util.HttpCodes.HTTP_500_INTERNAL_SERVER_ERROR;
         break;
     }
   }
