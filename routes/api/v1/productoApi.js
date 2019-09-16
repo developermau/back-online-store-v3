@@ -22,6 +22,10 @@ let categoriaModel = models.Categoria;
 
 // MODEL: proveedor
 let proveedorModel = models.Proveedor;
+// MODEL: opinion
+let opinionModel = models.Opinion;
+// MODEL: usuario
+let usuarioModel = models.Usuario;
 
 /* GET Lista de productos */
 router.get("/", function(req, res, next) {
@@ -60,7 +64,12 @@ router.get("/:pr_producto", function(req, res, next) {
       include: [
         { model: fotografiaModel, as: "fotografias" },
         { model: categoriaModel, as: "categoria" },
-        { model: proveedorModel, as: "proveedor" }
+        { model: proveedorModel, as: "proveedor" },
+        {
+          model: opinionModel,
+          as: "opiniones",
+          include: [{ model: usuarioModel, as: "usuario" }]
+        }
       ]
     })
     .then(function(producto) {
@@ -70,6 +79,8 @@ router.get("/:pr_producto", function(req, res, next) {
       if (producto !== undefined && producto !== null) {
         respuesta.statusCode = Util.HttpCodes.HTTP_200_OK;
         respuesta.msg = "producto encontrado";
+
+        // Data
         respuesta.data = producto;
       } else {
         respuesta.statusCode = Util.HttpCodes.HTTP_404_NOT_FOUND;
