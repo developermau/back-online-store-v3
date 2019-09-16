@@ -27,6 +27,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       }
     });
+
+    RelGusta.belongsTo(models.Usuario, {
+      as: "usuario",
+      onDelete: "CASCADE",
+      foreignKey: {
+        name: "us_usuario",
+        allowNull: false
+      }
+    });
   };
   return RelGusta;
 };
