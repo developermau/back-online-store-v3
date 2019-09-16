@@ -24,8 +24,8 @@ module.exports = {
 function generarOpiniones(n, calidades, usuarios, productos) {
   const opiniones = [];
 
-  for (let i = 0; i < n; i++) {
-    const calificacion = Math.floor(Math.random() * 5) + 1;
+  for (let i = 1; i <= n; i++) {
+    const calificacion = Math.floor(Math.random() * 4) + 1;
     const usuarioId = Math.floor(Math.random() * usuarios.length) + 1;
     const productoId = Math.floor(Math.random() * productos.length) + 1;
 
