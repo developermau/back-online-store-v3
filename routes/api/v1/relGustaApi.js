@@ -42,7 +42,7 @@ router.get("/", function(req, res, next) {
     });
 });
 
-/* GET Buscar una relacion por su id */
+/* GET Todos los me gusta de un usuario */
 router.get("/usuarios/:us_usuario", function(req, res, next) {
   const OPERACION = "FIND";
   const CAMPO = "POR ID";
@@ -55,6 +55,33 @@ router.get("/usuarios/:us_usuario", function(req, res, next) {
     .findAll({
       where: {
         us_usuario: usuarioId
+      },
+      attributes: { exclude: ["us_usuario", "pr_producto"] },
+      include: [{ model: productoModel, as: "producto" }]
+    })
+    .then(function(relGustaList) {
+      res.status(200).json(relGustaList);
+    })
+    .catch(err => {
+      let resError = fnHandlerError(err);
+      console.log(resError);
+      res.status(resError.statusCode).send(resError);
+    });
+});
+
+/* GET Todos los me gusta de un producto */
+router.get("/productos/:pr_producto", function(req, res, next) {
+  const OPERACION = "FIND";
+  const CAMPO = "POR ID";
+  console.log(`\n${OPERACION}:${NAME_MODEL} ${CAMPO}`);
+
+  // ID
+  var productoId = req.params.pr_producto;
+
+  relGustaModel
+    .findAll({
+      where: {
+        pr_producto: productoId
       },
       attributes: { exclude: ["us_usuario", "pr_producto"] },
       include: [{ model: productoModel, as: "producto" }]
