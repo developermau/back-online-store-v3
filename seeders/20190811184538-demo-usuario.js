@@ -67,6 +67,28 @@ function generateAllUsuarios() {
       // Audit
       createdAt: new Date(),
       updatedAt: new Date()
+    },
+    {
+      us_primer_nombre: "David",
+      us_segundo_nombre: "Fernando",
+      us_paterno_apellido: "Torrez",
+      us_materno_apellido: "Dominguez",
+      us_genero: "Masculinoo",
+      us_carnet: 72344532,
+      us_username: "dtorrez",
+      us_password: "dtorrez-1234",
+      us_email: "dtorrez@mail.com",
+      us_direccion: "Calle Aroma #432 Zona Sur",
+      us_telefono_fijo: 5343133,
+      us_telefono_movil: 65738433,
+      us_avatar: "https://randomuser.me/api/portraits/thumb/men/70.jpg",
+      us_fecha_nacimiento: new Date(1992, 10, 9),
+      // references
+      ro_rol: 2,
+      us_active: true,
+      // Audit
+      createdAt: new Date(),
+      updatedAt: new Date()
     }
   ];
 }
