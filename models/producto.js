@@ -79,7 +79,7 @@ module.exports = (sequelize, DataTypes) => {
         name: "pr_producto",
         allowNull: false
       },
-      as: "opinions"
+      as: "opiniones"
     });
 
     Producto.belongsTo(models.Proveedor, {
