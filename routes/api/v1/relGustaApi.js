@@ -56,7 +56,7 @@ router.get("/usuarios/:us_usuario", function(req, res, next) {
       where: {
         us_usuario: usuarioId
       },
-      attributes: { exclude: ["us_usuario", "pr_producto"] },
+      // attributes: { exclude: ["us_usuario", "pr_producto"] },
       include: [{ model: productoModel, as: "producto" }]
     })
     .then(function(relGustaList) {
@@ -83,8 +83,8 @@ router.get("/productos/:pr_producto", function(req, res, next) {
       where: {
         pr_producto: productoId
       },
-      attributes: { exclude: ["us_usuario", "pr_producto"] },
-      include: [{ model: productoModel, as: "producto" }]
+      // attributes: { exclude: ["us_usuario", "pr_producto"] },
+      include: [{ model: usuarioModel, as: "usuario" }]
     })
     .then(function(relGustaList) {
       res.status(200).json(relGustaList);
